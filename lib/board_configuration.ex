@@ -19,10 +19,8 @@ defmodule Battleship.BoardConfiguration do
     }
   end
 
-  def print_board(board) do
-    for i <- 1..board.size, j <- 1..board.size do
-      IO.puts("| #{board.matrix[{i, j}]}")
-    end
+  def transparent_board_to_string(board) do
+
   end
 
   defp create_empty_matrix(size) do
