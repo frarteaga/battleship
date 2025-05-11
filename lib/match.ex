@@ -17,7 +17,7 @@ defmodule Battleship.Match do
       players: %{},
       board_config: %BoardConfiguration{
         size: board_size,
-        matrix: create_empty_board(board_size)
+        matrix: BoardConfiguration.create_empty_board(board_size)
       },
       current_turn: nil,
       game_status: :waiting_for_players
@@ -29,7 +29,7 @@ defmodule Battleship.Match do
   def handle_call({:register_player, player_id}, _from, state) do
     if map_size(state.players) < 2 do
       new_state = put_in(state.players[player_id], %{
-        board: create_empty_board(state.board_config.size),
+        board: BoardConfiguration.create_empty_board(state.board_config.size),
         ships: [],
         hits: [],
         misses: []
@@ -37,12 +37,6 @@ defmodule Battleship.Match do
       {:reply, :ok, new_state}
     else
       {:reply, {:error, :game_full}, state}
-    end
-  end
-
-  def create_empty_board(size) do
-    for i <- 1..size, j <- 1..size, into: %{} do
-      {{i, j}, :empty}
     end
   end
 end

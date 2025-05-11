@@ -11,4 +11,10 @@ defmodule Battleship.BoardConfiguration do
     size: integer(),
     matrix: %{position() => cell_state()}
   }
+
+  def create_empty_board(size) do
+    for i <- 1..size, j <- 1..size, into: %{} do
+      {{i, j}, :empty}
+    end
+  end
 end
