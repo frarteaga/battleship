@@ -20,13 +20,31 @@ defmodule Battleship.BoardConfiguration do
   end
 
   def transparent_board_to_string(board) do
+    size = board.size
+    matrix = board.matrix
+
+    header = get_pretty_printable_repr_header(size)
+    row_separator = get_pretty_printable_row_separator(size)
 
   end
-
 
   def get_pretty_printable_repr_header(size) do
     res = for i <- 1..size, into: "", do: "   #{<<?A + i - 1>>}"
     " #{res}"
+  end
+
+  def get_pretty_printable_row_separator(size) do
+    "  " <> String.duplicate("+---", size) <> "+"
+  end
+
+  def get_pretty_printable_row(row_number, board) do
+    size = board.size
+    matrix = board.matrix
+
+    res = "#{row_number} |"
+    Enum.reduce(1..size, res, fn col_number, acc ->
+      acc <> " ~ |"
+    end)
   end
 
   defp create_empty_matrix(size) do
