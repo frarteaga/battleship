@@ -1,4 +1,4 @@
-defmodule BoardConfigurationTest do
+defmodule EmptyBoardConfigurationTest do
   use ExUnit.Case
 
   alias Battleship.BoardConfiguration
@@ -72,5 +72,4 @@ defmodule BoardConfigurationTest do
     board = BoardConfiguration.create_empty_board(2)
     assert BoardConfiguration.get_pretty_printable_row(2, board) == line
   end
-
 end
