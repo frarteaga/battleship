@@ -25,7 +25,11 @@ defmodule Battleship.BoardConfiguration do
 
     header = get_pretty_printable_repr_header(size)
     row_separator = get_pretty_printable_row_separator(size)
-
+    res = header <> "\n" <> row_separator
+    res = Enum.reduce(1..size, res, fn row_number, acc ->
+      acc <> "\n" <> get_pretty_printable_row(row_number, board) <> "\n" <> row_separator
+    end)
+    res <> "\n"
   end
 
   def get_pretty_printable_repr_header(size) do
