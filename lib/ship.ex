@@ -12,7 +12,11 @@ defmodule Battleship.Ship do
     hits: list(Battleship.BoardConfiguration.position())
   }
 
-  def get_size(ship_type) do
+  def get_ship_size(ship) do
+    get_size(ship.type)
+  end
+
+  defp get_size(ship_type) do
     case ship_type do
       :carrier -> 5
       :battleship -> 4
