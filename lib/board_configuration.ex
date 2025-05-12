@@ -66,7 +66,7 @@ defmodule Battleship.BoardConfiguration do
 
     res = "#{row_number} |"
     Enum.reduce(1..size, res, fn col_number, acc ->
-      acc <> " ~ |"
+      acc <> " #{get_pretty_printable_cell(matrix[{row_number, col_number}])} |"
     end)
   end
 
@@ -75,4 +75,9 @@ defmodule Battleship.BoardConfiguration do
       {{i, j}, :empty}
     end
   end
+
+  defp get_pretty_printable_cell(:empty), do: "~"
+  defp get_pretty_printable_cell(:ship), do: "@"
+  defp get_pretty_printable_cell(:hit), do: "*"
+  defp get_pretty_printable_cell(:miss), do: "^"
 end

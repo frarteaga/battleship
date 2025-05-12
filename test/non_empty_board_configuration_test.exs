@@ -82,4 +82,10 @@ defmodule NonEmptyBoardConfigurationTest do
     assert board == @non_empty_board_2x2_repr_down
   end
 
+  test "transparent_board_to_string/0 with non-empty 1x1 board" do
+    board = @non_empty_board_1x1
+    assert BoardConfiguration.transparent_board_to_string(board) == @non_empty_board_1x1_repr
+  end
+
+
 end
