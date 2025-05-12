@@ -87,5 +87,13 @@ defmodule NonEmptyBoardConfigurationTest do
     assert BoardConfiguration.transparent_board_to_string(board) == @non_empty_board_1x1_repr
   end
 
+  test "transparent_board_to_string/0 with non-empty 2x2 board to the right" do
+    board = @non_empty_board_2x2_repr_right
+    assert BoardConfiguration.transparent_board_to_string(board) == @non_empty_board_2x2_repr_right_repr
+  end
 
+  test "transparent_board_to_string/0 with non-empty 2x2 board to the down" do
+    board = @non_empty_board_2x2_repr_down
+    assert BoardConfiguration.transparent_board_to_string(board) == @non_empty_board_2x2_repr_down_repr
+  end
 end
