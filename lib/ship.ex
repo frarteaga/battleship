@@ -22,7 +22,7 @@ defmodule Battleship.Ship do
       :battleship -> 4
       :cruiser -> 3
       :submarine -> 3
-      :destroyer -> 2
+      :destroyer -> 1
     end
   end
 end
