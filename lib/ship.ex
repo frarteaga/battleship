@@ -10,7 +10,7 @@ defmodule Battleship.Ship do
     hits: list(Battleship.BoardConfiguration.position())
   }
 
-  def create_ship!(size, position, direction) do
+  def create_ship!(size, position, direction, board_size) do
     positions = case direction do
       :right -> Enum.map(0..(size - 1), fn i -> {position |> elem(0), (position |> elem(1)) + i} end)
       :down -> Enum.map(0..(size - 1), fn i -> {(position |> elem(0)) + i, position |> elem(1)} end)
@@ -18,10 +18,10 @@ defmodule Battleship.Ship do
     %__MODULE__{positions: positions, hits: []}
   end
 
-  def create_ship(size, position, direction) do
-    if validate_position?(position) do
+  def create_ship(size, position, direction, board_size) do
+    if validate_ship_inside_the_board?(position, size, direction, board_size) do
       try do
-        {:ok, create_ship!(size, position, direction)}
+        {:ok, create_ship!(size, position, direction, board_size)}
       rescue
         error -> {:error, error}
       end
@@ -30,9 +30,15 @@ defmodule Battleship.Ship do
     end
   end
 
-  def validate_position?(position) do
-    x = elem(position, 0)
-    y = elem(position, 1)
-    x >= 1 && y >= 1
+  def validate_ship_inside_the_board?(position, size, direction, board_size) do
+    if position |> elem(0) < 1 || position |> elem(1) < 1 do
+      false
+    else
+      final_position = case direction do
+        :right -> {position |> elem(0), (position |> elem(1)) + size - 1}
+        :down -> {(position |> elem(0)) + size - 1, position |> elem(1)}
+      end
+      final_position |> elem(0) <= board_size && final_position |> elem(1) <= board_size
+    end
   end
 end

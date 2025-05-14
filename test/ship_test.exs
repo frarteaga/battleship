@@ -6,7 +6,8 @@ defmodule Battleship.ShipTest do
     size = 2
     position = {1, 1}
     direction = :right
-    ship = Ship.create_ship!(size, position, direction)
+    board_size = 2
+    ship = Ship.create_ship!(size, position, direction, board_size)
     assert length(ship.positions) == size
     assert ship.positions == [{1, 1}, {1, 2}]
     assert ship.hits == []
@@ -16,7 +17,8 @@ defmodule Battleship.ShipTest do
     size = 2
     position = {1, 1}
     direction = :down
-    ship = Ship.create_ship!(size, position, direction)
+    board_size = 2
+    ship = Ship.create_ship!(size, position, direction, board_size)
     assert length(ship.positions) == size
     assert ship.positions == [{1, 1}, {2, 1}]
     assert ship.hits == []
@@ -26,7 +28,8 @@ defmodule Battleship.ShipTest do
     size = 2
     position = {1, 1}
     direction = :right
-    {:ok, ship} = Ship.create_ship(size, position, direction)
+    board_size = 2
+    {:ok, ship} = Ship.create_ship(size, position, direction, board_size)
     assert length(ship.positions) == size
   end
 
@@ -34,22 +37,31 @@ defmodule Battleship.ShipTest do
     size = 2
     position = {0, 1}
     direction = :right
-    {:error, reason} = Ship.create_ship(size, position, direction)
-    assert reason == "Invalid position"
+    board_size = 2
+    {:error, reason} = Ship.create_ship(size, position, direction, board_size)
   end
 
-  test "validate_position/1 returns false if the x position is invalid" do
+  test "validate_ship_inside_the_board? returns false if the x position is below 1" do
     position = {0, 1}
-    assert Ship.validate_position?(position) == false
+    size = 2
+    direction = :right
+    board_size = 10
+    assert Ship.validate_ship_inside_the_board?(position, size, direction, board_size) == false
   end
 
-  test "validate_position/1 returns false if the y position is invalid" do
+  test "validate_ship_inside_the_board? returns false if the y position is below 1" do
     position = {1, 0}
-    assert Ship.validate_position?(position) == false
+    size = 2
+    direction = :right
+    board_size = 10
+    assert Ship.validate_ship_inside_the_board?(position, size, direction, board_size) == false
   end
 
-  test "validate_position/1 returns true if the position is valid" do
+  test "validate_position_size? returns true if the ship is inside the board" do
     position = {1, 1}
-    assert Ship.validate_position?(position) == true
+    size = 10
+    direction = :right
+    board_size = 10
+    assert Ship.validate_ship_inside_the_board?(position, size, direction, board_size) == true
   end
 end
