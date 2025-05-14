@@ -19,7 +19,7 @@ defmodule Battleship.BoardConfiguration do
     }
   end
 
-  def add_ship(board, position, direction, size) do
+  def add_ship_obsolete(board, position, direction, size) do
     row = position |> elem(0)
     col = position |> elem(1)
     updated_matrix = case direction do

@@ -51,7 +51,7 @@ defmodule NonEmptyBoardConfigurationTest do
     position = {1, 1}
     direction = :right # or :down
     size = 1
-    board = BoardConfiguration.add_ship(board, position, direction, size)
+    board = BoardConfiguration.add_ship_obsolete(board, position, direction, size)
     assert board == @non_empty_board_1x1
   end
 
@@ -60,7 +60,7 @@ defmodule NonEmptyBoardConfigurationTest do
     position = {1, 1}
     direction = :down
     size = 1
-    board = BoardConfiguration.add_ship(board, position, direction, size)
+    board = BoardConfiguration.add_ship_obsolete(board, position, direction, size)
     assert board == @non_empty_board_1x1
   end
 
@@ -69,7 +69,7 @@ defmodule NonEmptyBoardConfigurationTest do
     position = {1, 1}
     direction = :right
     size = 2
-    board = BoardConfiguration.add_ship(board, position, direction, size)
+    board = BoardConfiguration.add_ship_obsolete(board, position, direction, size)
     assert board == @non_empty_board_2x2_repr_right
   end
 
@@ -78,7 +78,7 @@ defmodule NonEmptyBoardConfigurationTest do
     position = {1, 1}
     direction = :down
     size = 2
-    board = BoardConfiguration.add_ship(board, position, direction, size)
+    board = BoardConfiguration.add_ship_obsolete(board, position, direction, size)
     assert board == @non_empty_board_2x2_repr_down
   end
 
