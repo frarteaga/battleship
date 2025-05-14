@@ -10,7 +10,7 @@ defmodule Battleship.Ship do
     hits: list(Battleship.BoardConfiguration.position())
   }
 
-  def create_ship!(size, position, direction, board_size) do
+  def create_ship!(size, position, direction, _board_size) do
     positions = case direction do
       :right -> Enum.map(0..(size - 1), fn i -> {position |> elem(0), (position |> elem(1)) + i} end)
       :down -> Enum.map(0..(size - 1), fn i -> {(position |> elem(0)) + i, position |> elem(1)} end)
