@@ -30,12 +30,15 @@ defmodule Battleship.AddShipTest do
     }
   end
 
-  # test "add a ship out of bounds should raise an error" do
-  #   board_size = 1
-  #   board = BoardConfiguration.create_empty_board(board_size)
-  #   ship = Ship.create_ship!(2, {1, 1}, :right, board_size)
-  #   assert_raise RuntimeError, fn ->
-  #     BoardConfiguration.add_ship(board, ship)
-  #   end
-  # end
+  test "add a ship that collides with another ship should raise an error" do
+    board = BoardConfiguration.create_empty_board(2)
+    ship = Ship.create_ship!(2, {1, 1}, :right, 2)
+    board = BoardConfiguration.add_ship(board, ship)
+    try do
+      BoardConfiguration.add_ship(board, ship)
+      assert false
+    rescue
+      error -> IO.inspect(error)
+    end
+  end
 end

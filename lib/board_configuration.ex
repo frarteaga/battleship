@@ -28,6 +28,9 @@ defmodule Battleship.BoardConfiguration do
 
   def add_ship(board, ship) do
     updated_matrix = Enum.reduce(ship.positions, board.matrix, fn position, acc ->
+      if acc[position] != :empty do
+        raise "Ship already exists at position #{position}"
+      end
       Map.put(acc, position, :ship)
     end)
     %__MODULE__{
