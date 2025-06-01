@@ -10,18 +10,19 @@ defmodule Battleship.Ship do
     hits: list(Battleship.BoardConfiguration.position())
   }
 
-  def create_ship!(size, position, direction, _board_size) do
-    positions = case direction do
-      :right -> Enum.map(0..(size - 1), fn i -> {position |> elem(0), (position |> elem(1)) + i} end)
-      :down -> Enum.map(0..(size - 1), fn i -> {(position |> elem(0)) + i, position |> elem(1)} end)
-    end
-    %__MODULE__{positions: positions, hits: []}
+  def create_ship!(size, position, direction, board_size) do
+    {:ok, result} = create_ship(size, position, direction, board_size)
+    result
   end
 
   def create_ship(size, position, direction, board_size) do
     if validate_ship_inside_the_board?(position, size, direction, board_size) do
       try do
-        {:ok, create_ship!(size, position, direction, board_size)}
+        positions = case direction do
+          :right -> Enum.map(0..(size - 1), fn i -> {position |> elem(0), (position |> elem(1)) + i} end)
+          :down -> Enum.map(0..(size - 1), fn i -> {(position |> elem(0)) + i, position |> elem(1)} end)
+        end
+        {:ok, %__MODULE__{positions: positions, hits: []}}
       rescue
         error -> {:error, error}
       end

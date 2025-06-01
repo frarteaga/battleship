@@ -13,6 +13,19 @@ defmodule Battleship.ShipTest do
     assert ship.hits == []
   end
 
+  test "create_ship!/1 should raise an error if the ship is out of bounds" do
+    size = 2
+    position = {1, 1}
+    direction = :right
+    board_size = 1
+    try do
+      Ship.create_ship!(size, position, direction, board_size)
+      assert false
+    rescue
+      error -> IO.inspect(error)
+    end
+  end
+
   test "create_ship!/1 creates a ship of size 2 at a given position, to the down, at the beggining the ship is not hit" do
     size = 2
     position = {1, 1}
