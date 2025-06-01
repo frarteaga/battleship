@@ -30,12 +30,17 @@ defmodule Battleship.Match do
 
   # Server Callbacks
   def handle_call({:register_player, player_id}, _from, state) do
-    new_state = put_in(state.players[player_id], %{
-      board: BoardConfiguration.create_empty_board(state.board_size),
-      ships: [],
-      hits: [],
-      misses: []
-    })
-    {:reply, :ok, new_state}
+    players = state.players
+    if map_size(players) == 2 do
+      {:reply, {:error, :game_full}, state}
+    else
+      new_state = put_in(state.players[player_id], %{
+        board: BoardConfiguration.create_empty_board(state.board_size),
+        ships: [],
+        hits: [],
+        misses: []
+      })
+      {:reply, :ok, new_state}
+    end
   end
 end

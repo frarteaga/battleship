@@ -25,7 +25,7 @@ defmodule Battleship.MatchTest do
     ])
     Match.register_player(match, "player1")
     state = :sys.get_state(match)
-    assert state.players |> Map.size() == 1
+    assert state.players |> map_size() == 1
     assert state.players |> Map.get("player1") != nil
   end
 
@@ -37,7 +37,7 @@ defmodule Battleship.MatchTest do
     Match.register_player(match, "player1")
     Match.register_player(match, "player2")
     state = :sys.get_state(match)
-    assert state.players |> Map.size() == 2
+    assert state.players |> map_size() == 2
     assert state.players |> Map.get("player1") != nil
     assert state.players |> Map.get("player2") != nil
   end
@@ -50,11 +50,10 @@ defmodule Battleship.MatchTest do
     Match.register_player(match, "player1")
     Match.register_player(match, "player1")
     state = :sys.get_state(match)
-    assert state.players |> Map.size() == 1
+    assert state.players |> map_size() == 1
     assert state.players |> Map.get("player1") != nil
   end
 
-  @tag :skip
   test "register_player/2 should return an error if the match is full" do
     {:ok, match} = Match.start_link([
       board_size: 5,
@@ -65,7 +64,7 @@ defmodule Battleship.MatchTest do
     r = Match.register_player(match, "player3")
     assert r == {:error, :game_full}
     state = :sys.get_state(match)
-    assert state.players |> Map.size() == 2
+    assert state.players |> map_size() == 2
     assert state.players |> Map.get("player1") != nil
     assert state.players |> Map.get("player2") != nil
     assert state.players |> Map.get("player3") == nil
