@@ -2,6 +2,8 @@ defmodule Battleship.BoardConfiguration do
   @moduledoc """
   Structure that holds the board configuration and state.
   """
+  alias Battleship.Ship
+
   defstruct [:size, :matrix]
 
   @type position :: {integer(), integer()}
@@ -20,24 +22,19 @@ defmodule Battleship.BoardConfiguration do
   end
 
   def add_ship_obsolete(board, position, direction, size) do
-    row = position |> elem(0)
-    col = position |> elem(1)
-    updated_matrix = case direction do
-      :right ->
-        Enum.reduce(0..(size - 1), board.matrix, fn i, acc ->
-          Map.put(acc, {row, col + i}, :ship)
-        end)
-      :down ->
-        Enum.reduce(0..(size - 1), board.matrix, fn i, acc ->
-          Map.put(acc, {row + i, col}, :ship)
-        end)
-    end
+    ship = Ship.create_ship!(size, position, direction, size)
+    add_ship(board, ship)
+  end
+
+  def add_ship(board, ship) do
+    updated_matrix = Enum.reduce(ship.positions, board.matrix, fn position, acc ->
+      Map.put(acc, position, :ship)
+    end)
     %__MODULE__{
       size: board.size,
       matrix: updated_matrix
     }
   end
-
   def transparent_board_to_string(board) do
     size = board.size
     matrix = board.matrix
