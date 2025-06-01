@@ -2,6 +2,7 @@ defmodule Battleship.MatchTest do
   use ExUnit.Case
 
   alias Battleship.Match
+  alias Battleship.Ship
 
   test "start_match/1 should create the right initial state" do
     {:ok, match} = Match.start_link([
@@ -69,5 +70,21 @@ defmodule Battleship.MatchTest do
     assert state.players |> Map.get("player1") != nil
     assert state.players |> Map.get("player2") != nil
     assert state.players |> Map.get("player3") == nil
+  end
+
+  test "add_ships should allow the player to add a valid set of ships" do
+    board_size = 5
+    ship_lengths = [1, 2, 3]
+    {:ok, match} = Match.start_link([
+      board_size: board_size,
+      ship_lengths: ship_lengths
+    ])
+    Match.register_player(match, "player1")
+    Match.register_player(match, "player2")
+
+    player1_ships = Enum.with_index(ship_lengths, 1) |> Enum.map(fn({ship_length, row}) ->
+      Ship.create_ship!(ship_length, {row, 1}, :right, board_size)
+    end)
+    assert player1_ships |> length() == length(ship_lengths)
   end
 end
