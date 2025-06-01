@@ -19,19 +19,19 @@ defmodule Battleship.Match do
       players: %{},
       board_size: board_size,
       current_turn: nil,
-      game_status: :waiting_for_players,
+      game_status: :registering_players,
       ship_lengths: ship_lengths
     }}
   end
 
-  def register_player(match, player_id) do
-    GenServer.call(match, {:register_player, player_id})
+  def register_player(match, player_id, opts \\ []) do
+    timeout = Keyword.get(opts, :timeout, 5000)
+    GenServer.call(match, {:register_player, player_id}, timeout)
   end
 
   # Server Callbacks
   def handle_call({:register_player, player_id}, _from, state) do
-    players = state.players
-    if map_size(players) == 2 do
+    if map_size(state.players) == 2 do
       {:reply, {:error, :game_full}, state}
     else
       new_state = put_in(state.players[player_id], %{
@@ -40,7 +40,11 @@ defmodule Battleship.Match do
         hits: [],
         misses: []
       })
-      {:reply, :ok, new_state}
+      if map_size(new_state.players) == 2 do
+        {:reply, :ok, %{new_state | game_status: :adding_ships}}
+      else
+        {:reply, :ok, new_state}
+      end
     end
   end
 end
