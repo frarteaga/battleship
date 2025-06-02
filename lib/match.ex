@@ -58,9 +58,7 @@ defmodule Battleship.Match do
       {:reply, {:error, :wrong_state_to_add_ships}, state}
     else
       new_state = put_in(state.players[player_id][:ships], ships)
-      board = Enum.reduce(ships, state.players[player_id][:board], fn(ship, acc) ->
-        BoardConfiguration.add_ship(acc, ship)
-      end)
+      board = BoardConfiguration.add_ships(state.players[player_id][:board], ships)
       new_state = put_in(new_state.players[player_id][:board], board)
       {:reply, :ok, new_state}
     end

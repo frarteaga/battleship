@@ -39,6 +39,12 @@ defmodule Battleship.BoardConfiguration do
     }
   end
 
+  def add_ships(board, ships) do
+    Enum.reduce(ships, board, fn(ship, acc) ->
+      add_ship(acc, ship)
+    end)
+  end
+
   def get_ship_cells_count(board) do
     Enum.reduce(board.matrix, 0, fn({_key, value}, acc) ->
       if value == :ship do
