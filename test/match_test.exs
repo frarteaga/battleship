@@ -3,6 +3,7 @@ defmodule Battleship.MatchTest do
 
   alias Battleship.Match
   alias Battleship.Ship
+  alias Battleship.BoardConfiguration
 
   test "start_match/1 should create the right initial state" do
     {:ok, match} = Match.start_link([
@@ -72,7 +73,16 @@ defmodule Battleship.MatchTest do
     assert state.players |> Map.get("player3") == nil
   end
 
-  test "add_ships should allow the player to add a valid set of ships" do
+  test "add_ships can't be called in the wrong state" do
+    {:ok, match} = Match.start_link([
+      board_size: 5,
+      ship_lengths: [1, 2, 3]
+    ])
+    Match.register_player(match, "player1")
+    {:error, :wrong_state_to_add_ships} = Match.add_ships(match, "player1", [])
+  end
+
+  test "add_ships should allow to add a valid set of ships for a player" do
     board_size = 5
     ship_lengths = [1, 2, 3]
     {:ok, match} = Match.start_link([
@@ -81,10 +91,17 @@ defmodule Battleship.MatchTest do
     ])
     Match.register_player(match, "player1")
     Match.register_player(match, "player2")
-
     player1_ships = Enum.with_index(ship_lengths, 1) |> Enum.map(fn({ship_length, row}) ->
       Ship.create_ship!(ship_length, {row, 1}, :right, board_size)
     end)
     assert player1_ships |> length() == length(ship_lengths)
+    r = Match.add_ships(match, "player1", player1_ships)
+    assert r == :ok
+    state = :sys.get_state(match)
+    assert state.players |> Map.get("player1") |> Map.get(:ships) |> length() == length(ship_lengths)
+    board = state.players |> Map.get("player1") |> Map.get(:board)
+    ship_cells_count = BoardConfiguration.get_ship_cells_count(board)
+    assert ship_cells_count == Enum.sum(ship_lengths)
+    assert state.players |> Map.get("player2") |> Map.get(:ships) == []
   end
 end

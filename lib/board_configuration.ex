@@ -38,6 +38,17 @@ defmodule Battleship.BoardConfiguration do
       matrix: updated_matrix
     }
   end
+
+  def get_ship_cells_count(board) do
+    Enum.reduce(board.matrix, 0, fn({_key, value}, acc) ->
+      if value == :ship do
+        acc + 1
+      else
+        acc
+      end
+    end)
+  end
+
   def transparent_board_to_string(board) do
     size = board.size
     matrix = board.matrix

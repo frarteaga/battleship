@@ -29,6 +29,11 @@ defmodule Battleship.Match do
     GenServer.call(match, {:register_player, player_id}, timeout)
   end
 
+  def add_ships(match, player_id, ships, opts \\ []) do
+    timeout = Keyword.get(opts, :timeout, 5000)
+    GenServer.call(match, {:add_ships, player_id, ships}, timeout)
+  end
+
   # Server Callbacks
   def handle_call({:register_player, player_id}, _from, state) do
     if map_size(state.players) == 2 do
@@ -47,4 +52,18 @@ defmodule Battleship.Match do
       end
     end
   end
+
+  def handle_call({:add_ships, player_id, ships}, _from, state) do
+    if state.game_status != :adding_ships do
+      {:reply, {:error, :wrong_state_to_add_ships}, state}
+    else
+      new_state = put_in(state.players[player_id][:ships], ships)
+      board = Enum.reduce(ships, state.players[player_id][:board], fn(ship, acc) ->
+        BoardConfiguration.add_ship(acc, ship)
+      end)
+      new_state = put_in(new_state.players[player_id][:board], board)
+      {:reply, :ok, new_state}
+    end
+  end
+
 end
