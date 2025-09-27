@@ -22,7 +22,7 @@ defmodule Battleship.BoardConfiguration do
   end
 
   def add_ship_obsolete(board, position, direction, size) do
-    ship = Ship.create_ship!(size, position, direction, size)
+    ship = Ship.create_ship!(size, position, direction, board.size)
     add_ship(board, ship)
   end
 
@@ -57,7 +57,6 @@ defmodule Battleship.BoardConfiguration do
 
   def transparent_board_to_string(board) do
     size = board.size
-    matrix = board.matrix
 
     header = get_pretty_printable_repr_header(size)
     row_separator = get_pretty_printable_row_separator(size)
@@ -69,19 +68,19 @@ defmodule Battleship.BoardConfiguration do
   end
 
   def get_pretty_printable_repr_header(size) do
-    res = for i <- 1..size, into: "", do: "   #{<<?A + i - 1>>}"
-    " #{res}"
+    letters = for i <- 1..size, do: <<?A + i - 1>>
+    "        " <> Enum.join(letters, "   ")
   end
 
   def get_pretty_printable_row_separator(size) do
-    "  " <> String.duplicate("+---", size) <> "+"
+    "      " <> String.duplicate("+---", size) <> "+"
   end
 
   def get_pretty_printable_row(row_number, board) do
     size = board.size
     matrix = board.matrix
 
-    res = "#{row_number} |"
+    res = "    #{row_number} |"
     Enum.reduce(1..size, res, fn col_number, acc ->
       acc <> " #{get_pretty_printable_cell(matrix[{row_number, col_number}])} |"
     end)
