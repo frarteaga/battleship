@@ -1,6 +1,6 @@
 # Battleship
 
-**TODO: Add description**
+A small Elixir library that models the classic Battleship game. It provides data structures and functions to create an empty board, place ships with validation, and render a human-readable board representation for debugging or UI purposes. The included test suite demonstrates expected behaviors for ship creation, board boundaries, overlapping ships, and pretty-printing helpers.
 
 ## Installation
 
