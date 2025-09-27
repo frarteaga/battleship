@@ -57,7 +57,6 @@ defmodule Battleship.BoardConfiguration do
 
   def transparent_board_to_string(board) do
     size = board.size
-    matrix = board.matrix
 
     header = get_pretty_printable_repr_header(size)
     row_separator = get_pretty_printable_row_separator(size)
